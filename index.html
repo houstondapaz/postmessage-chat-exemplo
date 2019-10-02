@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>Pagina principal</title>
+  </head>
+  <body>
+    <form id="enviar-mensagem" action="" method="POST">
+      <label>Envie sua mensagem</label>
+      <input
+        name="message"
+        placeholder="Escreva sua mensagem"
+        id="mensagem-para-enviar"
+        type="text"
+      />
+      <button type="submit">Enviar</button>
+    </form>
+
+    <div>
+      <h1>Mensagens recebidas</h1>
+      <ul id="mensagens"></ul>
+    </div>
+
+    <div>
+      <label>Meu Iframe</label>
+      <iframe
+        id="meu-iframe"
+        src="meuiframe.html"
+        allowfullscreen="true"
+        width="100%"
+        height="100%"
+      ></iframe>
+    </div>
+
+    <script>
+      const ul = document.getElementById('mensagens')
+      // escutando eventos vindo de outras windows
+      window.addEventListener('message', function(e) {
+        // cria uma li da mensagem
+        const li = document.createElement('li')
+        // setando o dado recebido como texto da li
+        li.innerText = e.data
+        // inserindo a li na ul
+        ul.appendChild(li)
+      })
+      // guarda referencia para o iframe
+      const meuIframe = document.getElementById('meu-iframe')
+      // escuta o evento do form para enviar mensagem
+      document.getElementById('enviar-mensagem').addEventListener('submit', function(e) {
+        // evitando que a pagina se atualize
+        e.preventDefault()
+        // enviar mensagem para o ifram
+        meuIframe.contentWindow.postMessage(e.target['message'].value, '*')
+      })
+    </script>
+  </body>
+</html>
